@@ -17,7 +17,6 @@ const ArenaWithBull = ({ matador }: ArenaWithBullProps) => {
         const applauseInterval = setInterval(() => {
             setApplause(Math.floor(Math.random() * 4))
         }, 1000);
-
         // purpose Parent rerender 
         const screamInterval = setInterval(() => {
             setScreamJoy(Math.random())

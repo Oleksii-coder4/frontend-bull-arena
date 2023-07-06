@@ -89,3 +89,9 @@ h1 {
 
   border: 1px solid black;
 }
+
+.matador {
+  display: inline-block;
+  width: 100% !important;
+  height: 100%;
+}
