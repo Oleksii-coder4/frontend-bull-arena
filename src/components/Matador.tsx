@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from "react";
-import img from './imgsAndAudio/matador.jpg'
+import img from './imgsAndAudio/youngMatador.gif'
 import audio from './imgsAndAudio/mixkit-rhythmic-audience-clapping-loop-522.wav'
 export const Matador = memo( ({applause, setMatarodPosition, matadorPosition}: {applause: number, setMatarodPosition: (param: number) => void, matadorPosition: number}) => {
     const [bullPosition, setBullPosition] = useState(null)
@@ -25,17 +25,14 @@ export const Matador = memo( ({applause, setMatarodPosition, matadorPosition}: {
         }
     }, [bullPosition])
     let renderAudio: any 
-    let a: any
     useMemo(() => {
         if(applause === 3) {
-            console.log('only one time')
             renderAudio = < audio style={{visibility: "hidden"}}controls autoPlay> <source src={audio} type="audio/mpeg" /> </audio>
-            a = <h1>Я отрондерился)</h1> 
+            console.log('Рендер или не рендер, вот в чем вопрос...') 
         }
     }, [applause])
     return (
         <div>
-            {a}
             {renderAudio}
             <img className='matador' src={img} alt="matador" />
         </div>

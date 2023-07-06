@@ -78,20 +78,20 @@ h1 {
 
 .duel .matador {
   width: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
 }
 
 .duel .cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 200px;
   width: 250px;
-
   border: 1px solid black;
 }
 
 .matador {
-  display: inline-block;
-  width: 100% !important;
-  height: 100%;
+  display: flex;
+  width: 100px !important;
+  height: 100px !important;
 }
