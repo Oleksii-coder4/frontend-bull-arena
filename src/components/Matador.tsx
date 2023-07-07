@@ -1,13 +1,13 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import img from './imgsAndAudio/youngMatador.gif'
 import audio from './imgsAndAudio/mixkit-rhythmic-audience-clapping-loop-522.wav'
 export const Matador = memo( ({applause, setMatarodPosition, matadorPosition}: {applause: number, setMatarodPosition: (param: number) => void, matadorPosition: number}) => {
     const [bullPosition, setBullPosition] = useState(null)
-    document.addEventListener('bullRun', function(event: Event) {
+    document.addEventListener('bullRun', function getBullPosition(event: Event) {
         const customEvent = event as CustomEvent
         setBullPosition(customEvent.detail.position)
+        document.removeEventListener('bullRun', getBullPosition)
     });
-
     function checkMatadorPosition() {
         let futureMatadorPosition =  Math.floor(Math.random() * 8) 
         if(futureMatadorPosition !== bullPosition) {
@@ -19,16 +19,15 @@ export const Matador = memo( ({applause, setMatarodPosition, matadorPosition}: {
         }
     }
     // меняю позицию матадора только когда  изменяется позиция быка 
-    useMemo(() => {
+    useEffect(() => {
         if(bullPosition === matadorPosition) {
             checkMatadorPosition()
         }
     }, [bullPosition])
     let renderAudio: any 
-    useMemo(() => {
+    useEffect(() => {
         if(applause === 3) {
-            renderAudio = < audio style={{visibility: "hidden"}}controls autoPlay> <source src={audio} type="audio/mpeg" /> </audio>
-            console.log('Рендер или не рендер, вот в чем вопрос...') 
+            console.log('Audio Is Playing - La la la la la la la la la la la lala')
         }
     }, [applause])
     return (
@@ -39,6 +38,9 @@ export const Matador = memo( ({applause, setMatarodPosition, matadorPosition}: {
     )
 },
     (prevProps, nextProps) => {
-        return prevProps.applause === nextProps.applause 
+        if(nextProps.applause === 3 && prevProps.applause !== 3)  {
+            return false
+        }
+        return true
       }  
  )

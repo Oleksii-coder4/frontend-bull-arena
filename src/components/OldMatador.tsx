@@ -11,47 +11,46 @@ interface MyComponentProps {
   setMatarodPosition: (position: number) => void;
   matadorPosition: number
 }
-  
-class OldMatador extends React.Component<MyComponentProps, MyComponentState> {
+class Matador extends React.Component<MyComponentProps, MyComponentState> {
   constructor(props: MyComponentProps) {
     super(props);
     this.state = {
       bullPosition: null,
     };
+    this.getBullPosition = this.getBullPosition.bind(this)
     this.checkMatadorPosition = this.checkMatadorPosition.bind(this)
-    // this.handleBullRun = this.handleBullRun.bind(this)
   }
-
-
-  componentDidUpdate(prevProps: MyComponentProps, prevState: MyComponentState) {
-    document.addEventListener('bullRun', (event: Event) => {
-      const customEvent = event as CustomEvent;
-      this.setState({ bullPosition: customEvent.detail.position });
-    } );
-    if (prevState.bullPosition !== this.state.bullPosition) {
-      if (this.state.bullPosition === this.props.matadorPosition) {
-        this.checkMatadorPosition();
-      }
-    }
+  componentDidMount() {
+    document.addEventListener('bullRun', this.getBullPosition);
+    console.log(this.state.bullPosition)
   }
-
+  getBullPosition = (event: Event) => {
+    const customEvent = event as CustomEvent;
+    this.setState({ bullPosition: customEvent.detail.position });
+    document.removeEventListener('bullRun', this.getBullPosition);
+  };
   checkMatadorPosition() {
-    let futureMatadorPosition = Math.floor(Math.random() * 8);
+    const futureMatadorPosition = Math.floor(Math.random() * 8);
     if (futureMatadorPosition !== this.state.bullPosition) {
-      console.log(`Matador is moving from ${this.props.matadorPosition} to ${futureMatadorPosition}`);
+      console.log(`Matador is moving from ${ this.props.matadorPosition } to ${ futureMatadorPosition }`);
       this.props.setMatarodPosition(futureMatadorPosition);
     } else {
       this.checkMatadorPosition();
     }
   }
-  shouldComponentUpdate(nextProps: MyComponentProps) {
-    if (nextProps.applause !== this.props.applause) {
-      return true; // Обновляем компонент
+  componentDidUpdate(prevProps: MyComponentProps, prevState: MyComponentState) {
+    document.addEventListener('bullRun', this.getBullPosition);
+    console.log(this.state.bullPosition)
+    if (this.state.bullPosition === this.props.matadorPosition) {
+      this.checkMatadorPosition();
     }
-    return false; // Не обновляем компонент
   }
 
   render() {
+    const { applause } = this.props;
+    if (applause === 3) {
+      console.log('Audio Is Playing - La la la la la la la la la la la lala');
+    }
     return (
       <div>
         <img className='matador' src={img} alt="matador" />
@@ -59,5 +58,9 @@ class OldMatador extends React.Component<MyComponentProps, MyComponentState> {
     );
   }
 }
-
-export default OldMatador
+export default memo(Matador, (prevProps, nextProps) => {
+  if (nextProps.applause === 3 && prevProps.applause !== 3) {
+    return false;
+  }
+  return true;
+});
